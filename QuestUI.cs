@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Terraria;
 using Terraria.GameContent.UI.Elements;
+using Terraria.ID;
 using Terraria.UI;
 
 namespace NIMod.UI
@@ -31,15 +33,40 @@ namespace NIMod.UI
             panel.Height.Set(height, 0);
 
             UIText title = new UIText("Quests", 0.6f, true);
+            UIList container = new UIList();
+            container.Width.Set(width, 0);
+            container.Height.Set(height, 0);
 
-            UIText qSample = new UIText("Sample");
+            Dictionary<int, int> fqList = new Dictionary<int, int>();
+            fqList.Add(ItemID.Gel, 10);
+            fqList.Add(ItemID.PinkGel, 1);
+            FetchQuest fq = new FetchQuest(NPCID.Guide, fqList);
+            FetchQuest fq2 = new FetchQuest(NPCID.Guide, fqList);
+            FetchQuest fq3 = new FetchQuest(NPCID.Guide, fqList);
+            FetchQuest fq4 = new FetchQuest(NPCID.Guide, fqList);
+            QuestJournal.questList.Add(fq);
+            QuestJournal.questList.Add(fq2);
+            QuestJournal.questList.Add(fq3);
+            QuestJournal.questList.Add(fq4);
 
-            panel.Append(title); //bitch
-            panel.Append(qSample);
+            UIText qSample2 = new UIText($"{Lang.GetItemNameValue(ItemID.Gel)}");
+            UIList qContainer = new UIList();
+            qContainer.Width.Set(width, 0);
+            qContainer.Height.Set(height, 0);
+            qContainer.AddRange(QuestJournal.questList);
+            qContainer.SetScrollbar(new UIScrollbar());
 
-            panel.OverflowHidden = true;
+            container.Add(title);
+            container.Add(qContainer);
+
+            panel.Append(container);
 
             Append(panel); //appends the panel to the UIState
         }
+    }
+
+    public class QuestPanel : UIPanel
+    {
+        public QuestPanel() { }
     }
 }
