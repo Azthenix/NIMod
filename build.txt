@@ -1,0 +1,3 @@
+displayName = Narrative Intelligence
+author = CA
+version = 0.1
