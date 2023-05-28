@@ -15,10 +15,11 @@ namespace NIMod.UI
     public class QuestUI : UIState
     {
         public static bool visible;
+        public static UIList qContainer = new UIList();
         public UIPanel panel;
 
         public int width = 175;
-        public int height = 250;
+        public int height = 200;
 
         public override void OnInitialize()
         {
@@ -30,34 +31,32 @@ namespace NIMod.UI
             panel.Left.Set(600, 0); //this makes the distance between the left of the screen and the left of the panel 500 pixels (somewhere by the middle)
             panel.Top.Set(100, 0); //this is the distance between the top of the screen and the top of the panel
             panel.Width.Set(width, 0);
-            panel.Height.Set(height, 0);
+            panel.Height.Set(height+50, 0);
 
             UIText title = new UIText("Quests", 0.6f, true);
             UIList container = new UIList();
             container.Width.Set(width, 0);
-            container.Height.Set(height, 0);
+            container.Height.Set(height+50, 0);
 
             Dictionary<int, int> fqList = new Dictionary<int, int>();
             fqList.Add(ItemID.Gel, 10);
             fqList.Add(ItemID.PinkGel, 1);
+            fqList.Add(ItemID.Mushroom, 1);
+            fqList.Add(ItemID.Wood, 1);
+            fqList.Add(ItemID.Cactus, 1);
+            fqList.Add(ItemID.StoneBlock, 1);
             FetchQuest fq = new FetchQuest(NPCID.Guide, fqList);
-            FetchQuest fq2 = new FetchQuest(NPCID.Guide, fqList);
-            FetchQuest fq3 = new FetchQuest(NPCID.Guide, fqList);
-            FetchQuest fq4 = new FetchQuest(NPCID.Guide, fqList);
             QuestJournal.questList.Add(fq);
-            QuestJournal.questList.Add(fq2);
-            QuestJournal.questList.Add(fq3);
-            QuestJournal.questList.Add(fq4);
 
             UIText qSample2 = new UIText($"{Lang.GetItemNameValue(ItemID.Gel)}");
-            UIList qContainer = new UIList();
             qContainer.Width.Set(width, 0);
             qContainer.Height.Set(height, 0);
-            qContainer.AddRange(QuestJournal.questList);
-            qContainer.SetScrollbar(new UIScrollbar());
 
             container.Add(title);
-            container.Add(qContainer);
+            container.Add(QuestJournal.questList);
+            QuestJournal.questList.Width.Set(width, 0);
+            QuestJournal.questList.Height.Set(height, 0);
+            QuestJournal.questList.SetScrollbar(new UIScrollbar());
 
             panel.Append(container);
 

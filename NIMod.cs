@@ -8,10 +8,12 @@ using NIMod.UI;
 
 namespace NIMod
 {
-	public class NIMod : ModSystem
+    public class NIMod : ModSystem
     {
         internal QuestUI questUI;
         public UserInterface questInterface;
+
+        private int counter = 0;
 
         public override void Load()
         {
@@ -38,7 +40,7 @@ namespace NIMod
 
         public override void ModifyInterfaceLayers(List<GameInterfaceLayer> layers)
         {
-            layers.Add(new LegacyGameInterfaceLayer("Cool Mod: Something UI", DrawSomethingUI, InterfaceScaleType.UI));
+            layers.Insert(layers.FindIndex(layer => layer.Name == "Vanilla: Inventory"), new LegacyGameInterfaceLayer("NIMod: Quest UI", DrawSomethingUI, InterfaceScaleType.UI));
         }
 
         private bool DrawSomethingUI()
@@ -50,6 +52,25 @@ namespace NIMod
                 questInterface.Draw(Main.spriteBatch, new GameTime());
             }
             return true;
+        }
+
+        public override void PostUpdateEverything()
+        {
+            base.PostUpdateEverything();
+
+            counter++;
+            if (counter % 60 == 0)
+            {
+                foreach (Quest q in QuestJournal.questList)
+                {
+                    if (q.qType == QuestType.fetch)
+                    {
+                        (q as FetchQuest).UpdateStatus();
+                    }
+                }
+
+                counter %= 3600;
+            }
         }
     }
 }

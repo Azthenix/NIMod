@@ -12,7 +12,7 @@ namespace NIMod
 {
     public static class QuestJournal
     {
-        public static List<Quest> questList = new List<Quest>();
+        public static UIList questList = new UIList();
     }
 
     public enum QuestType
@@ -35,7 +35,7 @@ namespace NIMod
         public Quest()
         {
             this.Width.Set(0, 1.0f);
-            this.Height.Set(100, 0);
+            this.Height.Set(0, 1.0f);
             container = new UIList();
             this.Append(container);
             container.Width.Set(0, 1.0f);
@@ -53,19 +53,29 @@ namespace NIMod
             this.qType = QuestType.fetch;
             this.items = items;
 
-            this.title = new UIText("Gather");
+            this.title = new UIText("Gather", 0.8f);
             this.container.Add(this.title);
 
             foreach (KeyValuePair<int, int> item in items)
             {
                 int itemCount = Main.player[0].CountItem(item.Key, item.Value);
-                this.container.Add(new UIText($" - {Lang.GetItemNameValue(item.Key)} {itemCount}/{item.Value}"));
+                this.container.Add(new UIText($" - {Lang.GetItemNameValue(item.Key)} {itemCount}/{item.Value}", 0.6f));
             }
+            this.container.Height.Set((items.Count * 15) + 40, 0);
+
+            this.Height.Set(title.Height.Pixels + this.container.Height.Pixels, 0);
         }
 
         public void UpdateStatus()
         {
             //update stuff
+            this.container.Clear();
+            this.container.Add(this.title);
+            foreach (KeyValuePair<int, int> item in items)
+            {
+                int itemCount = Main.player[0].CountItem(item.Key, item.Value);
+                this.container.Add(new UIText($" - {Lang.GetItemNameValue(item.Key)} {itemCount}/{item.Value}", 0.6f));
+            }
         }
     }
 
