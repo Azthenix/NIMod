@@ -15,13 +15,8 @@ namespace NIMod
         {
             base.OnEnterWorld(player);
 
-            Dictionary<int, int> fqList = new Dictionary<int, int>();
-            fqList.Add(ItemID.Gel, 10);
-            FetchQuest fq2 = new FetchQuest(NPCID.Guide, fqList);
-            fqList.Add(ItemID.PinkGel, 1);
-            FetchQuest fq3 = new FetchQuest(NPCID.Guide, fqList);
-            QuestJournal.questList.Add(fq2);
-            QuestJournal.questList.Add(fq3);
+            HuntQuest hq = new HuntQuest(NPCID.Guide, NPCID.GreenSlime, 3);
+            QuestJournal.availableQList.Add(hq);
         }
     }
 }

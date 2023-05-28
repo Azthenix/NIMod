@@ -15,7 +15,6 @@ namespace NIMod.UI
     public class QuestUI : UIState
     {
         public static bool visible;
-        public static UIList qContainer = new UIList();
         public UIPanel panel;
 
         public int width = 175;
@@ -38,19 +37,7 @@ namespace NIMod.UI
             container.Width.Set(width, 0);
             container.Height.Set(height+50, 0);
 
-            Dictionary<int, int> fqList = new Dictionary<int, int>();
-            fqList.Add(ItemID.Gel, 10);
-            fqList.Add(ItemID.PinkGel, 1);
-            fqList.Add(ItemID.Mushroom, 1);
-            fqList.Add(ItemID.Wood, 1);
-            fqList.Add(ItemID.Cactus, 1);
-            fqList.Add(ItemID.StoneBlock, 1);
-            FetchQuest fq = new FetchQuest(NPCID.Guide, fqList);
-            QuestJournal.questList.Add(fq);
-
             UIText qSample2 = new UIText($"{Lang.GetItemNameValue(ItemID.Gel)}");
-            qContainer.Width.Set(width, 0);
-            qContainer.Height.Set(height, 0);
 
             container.Add(title);
             container.Add(QuestJournal.questList);
@@ -62,10 +49,5 @@ namespace NIMod.UI
 
             Append(panel); //appends the panel to the UIState
         }
-    }
-
-    public class QuestPanel : UIPanel
-    {
-        public QuestPanel() { }
     }
 }
