@@ -27,6 +27,7 @@ namespace NIMod
     {
         public int qNPCID;
         public QuestType qType;
+        public int rating;
 
         internal UIList container;
         internal UIText title;
@@ -48,11 +49,12 @@ namespace NIMod
     {
         public Dictionary<int, int> items;
 
-        public FetchQuest(int qNPCID, Dictionary<int, int> items)
+        public FetchQuest(int qNPCID, Dictionary<int, int> items, int rating)
         {
             this.qNPCID = qNPCID;
             this.qType = QuestType.fetch;
             this.items = items;
+            this.rating = rating;
 
             this.title = new UIText("Gather", 0.8f);
             this.container.Add(this.title);
@@ -113,11 +115,12 @@ namespace NIMod
         public int count;
         public int required;
 
-        public HuntQuest(int qNPCID, int enemy, int required)
+        public HuntQuest(int qNPCID, int enemy, int required, int rating)
         {
             this.qNPCID = qNPCID;
             this.qType = QuestType.hunt;
             this.enemyID = enemy;
+            this.rating = rating;
 
             this.title = new UIText("Hunt", 0.8f);
             this.container.Add(this.title);

@@ -14,9 +14,6 @@ namespace NIMod
         public override void OnEnterWorld(Player player)
         {
             base.OnEnterWorld(player);
-
-            HuntQuest hq = new HuntQuest(NPCID.Guide, NPCID.GreenSlime, 3);
-            QuestJournal.availableQList.Add(hq);
         }
     }
 }

@@ -1,3 +1,4 @@
 displayName = Narrative Intelligence
 author = CA
 version = 0.1
+dllReferences = Microsoft.ML, Microsoft.ML.Core, Microsoft.ML.Data, Microsoft.ML.StandardTrainers, Microsoft.ML.LightGbm, Microsoft.ML.DataView, Microsoft.ML.Transforms, Newtonsoft.Json, Microsoft.ML.FastTree, Microsoft.ML.CpuMath
