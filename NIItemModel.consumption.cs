@@ -7,59 +7,80 @@ using System.IO;
 using System.Collections.Generic;
 namespace NIMod
 {
-    public partial class NIModel
+    public partial class NIItemModel
     {
         /// <summary>
-        /// model input class for NIModel.
+        /// model input class for NIItemModel.
         /// </summary>
         #region model input class
         public class ModelInput
         {
-            [ColumnName(@"downedEOC")]
-            public float DownedEOC { get; set; }
+            [ColumnName(@"HP")]
+            public float HP { get; set; }
 
-            [ColumnName(@"downedSkel")]
-            public float DownedSkel { get; set; }
+            [ColumnName(@"Mana")]
+            public float Mana { get; set; }
 
-            [ColumnName(@"downedWOF")]
-            public float DownedWOF { get; set; }
+            [ColumnName(@"Defense")]
+            public float Defense { get; set; }
 
-            [ColumnName(@"rating")]
-            public float Rating { get; set; }
+            [ColumnName(@"EOC")]
+            public bool EOC { get; set; }
+
+            [ColumnName(@"Skel")]
+            public bool Skel { get; set; }
+
+            [ColumnName(@"WOF")]
+            public bool WOF { get; set; }
+
+            [ColumnName(@"Item")]
+            public float Item { get; set; }
 
         }
 
         #endregion
 
         /// <summary>
-        /// model output class for NIModel.
+        /// model output class for NIItemModel.
         /// </summary>
         #region model output class
         public class ModelOutput
         {
-            [ColumnName(@"downedEOC")]
-            public float DownedEOC { get; set; }
+            [ColumnName(@"HP")]
+            public float HP { get; set; }
 
-            [ColumnName(@"downedSkel")]
-            public float DownedSkel { get; set; }
+            [ColumnName(@"Mana")]
+            public float Mana { get; set; }
 
-            [ColumnName(@"downedWOF")]
-            public float DownedWOF { get; set; }
+            [ColumnName(@"Defense")]
+            public float Defense { get; set; }
 
-            [ColumnName(@"rating")]
-            public float Rating { get; set; }
+            [ColumnName(@"EOC")]
+            public float[] EOC { get; set; }
+
+            [ColumnName(@"Skel")]
+            public float[] Skel { get; set; }
+
+            [ColumnName(@"WOF")]
+            public float[] WOF { get; set; }
+
+            [ColumnName(@"Item")]
+            public uint Item { get; set; }
 
             [ColumnName(@"Features")]
             public float[] Features { get; set; }
 
+            [ColumnName(@"PredictedLabel")]
+            public float PredictedLabel { get; set; }
+
             [ColumnName(@"Score")]
-            public float Score { get; set; }
+            public float[] Score { get; set; }
 
         }
 
         #endregion
 
-        private static string MLNetModelPath = Path.GetFullPath("NIModel.zip");
+        private static string MLNetModelPath = $"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\\My Games\\Terraria\\tModLoader\\ModSources\\NIMod\\NIItemModel.zip";
 
         public static readonly Lazy<PredictionEngine<ModelInput, ModelOutput>> PredictEngine = new Lazy<PredictionEngine<ModelInput, ModelOutput>>(() => CreatePredictEngine(), true);
 

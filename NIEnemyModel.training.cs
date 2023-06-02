@@ -6,11 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
+using Microsoft.ML.Transforms;
 using Microsoft.ML;
 
 namespace NIMod
 {
-    public partial class NIModel
+    public partial class NIEnemyModel
     {
         /// <summary>
         /// Retrains model using the pipeline generated as part of the training process. For more information on how to load data, see aka.ms/loaddata.
@@ -34,10 +35,13 @@ namespace NIMod
         public static IEstimator<ITransformer> BuildPipeline(MLContext mlContext)
         {
             // Data process configuration with pipeline data transformations
-            var pipeline = mlContext.Transforms.ReplaceMissingValues(new []{new InputOutputColumnPair(@"downedEOC", @"downedEOC"),new InputOutputColumnPair(@"downedSkel", @"downedSkel"),new InputOutputColumnPair(@"downedWOF", @"downedWOF")})      
-                                    .Append(mlContext.Transforms.Concatenate(@"Features", new []{@"downedEOC",@"downedSkel",@"downedWOF"}))      
+            var pipeline = mlContext.Transforms.Categorical.OneHotEncoding(new []{new InputOutputColumnPair(@"EOC", @"EOC"),new InputOutputColumnPair(@"Skel", @"Skel"),new InputOutputColumnPair(@"WOF", @"WOF")}, outputKind: OneHotEncodingEstimator.OutputKind.Indicator)      
+                                    .Append(mlContext.Transforms.ReplaceMissingValues(new []{new InputOutputColumnPair(@"HP", @"HP"),new InputOutputColumnPair(@"Mana", @"Mana"),new InputOutputColumnPair(@"Defense", @"Defense")}))      
+                                    .Append(mlContext.Transforms.Concatenate(@"Features", new []{@"EOC",@"Skel",@"WOF",@"HP",@"Mana",@"Defense"}))      
+                                    .Append(mlContext.Transforms.Conversion.MapValueToKey(outputColumnName:@"Enemy",inputColumnName:@"Enemy"))      
                                     .Append(mlContext.Transforms.NormalizeMinMax(@"Features", @"Features"))      
-                                    .Append(mlContext.Regression.Trainers.Sdca(new SdcaRegressionTrainer.Options(){L1Regularization=1F,L2Regularization=0.1F,LabelColumnName=@"rating",FeatureColumnName=@"Features"}));
+                                    .Append(mlContext.MulticlassClassification.Trainers.LbfgsMaximumEntropy(new LbfgsMaximumEntropyMulticlassTrainer.Options(){L1Regularization=1F,L2Regularization=1F,LabelColumnName=@"Enemy",FeatureColumnName=@"Features"}))      
+                                    .Append(mlContext.Transforms.Conversion.MapKeyToValue(outputColumnName:@"PredictedLabel",inputColumnName:@"PredictedLabel"));
 
             return pipeline;
         }

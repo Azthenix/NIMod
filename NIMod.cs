@@ -84,32 +84,39 @@ namespace NIMod
 
                         if(roll <= (QuestJournal.questList.Count + QuestJournal.availableQList.Count + 1) * 10)
                         {
-                            NIModel.ModelInput sampleData = new NIModel.ModelInput()
-                            {
-                                DownedEOC = (NPC.downedBoss1 ? 1F : 0F),
-                                DownedSkel = (NPC.downedBoss3 ? 1F : 0F),
-                                DownedWOF = (Main.hardMode ? 1F : 0F),
-                            };
-
-                            NIModel.ModelOutput output = NIModel.Predict(sampleData);
-                            int rating = (int)output.Score;
-
                             roll = r.Next(2);
 
                             if(roll == 0)
                             {
-                                Dictionary<int, int> dict = new Dictionary<int, int>();
-                                var itemList = ContentSamples.ItemsByType.Values.Where(item => (item.rare == rating && item.maxStack >= 10));
-                                dict.Add(itemList.ElementAt(r.Next(itemList.Count())).netID, 10);
+                                var fetchQuestFactors = new NIItemModel.ModelInput()
+                                {
+                                    HP = Main.LocalPlayer.statLifeMax,
+                                    Mana = Main.LocalPlayer.statManaMax,
+                                    Defense = Main.LocalPlayer.statDefense,
+                                    EOC = NPC.downedBoss1,
+                                    Skel = NPC.downedBoss3,
+                                    WOF = Main.hardMode,
+                                };
 
-                                FetchQuest fq = new FetchQuest(NPCID.Guide, dict, rating);
+                                Dictionary<int, int> dict = new Dictionary<int, int>();
+                                dict.Add((int)NIItemModel.Predict(fetchQuestFactors).PredictedLabel, 10);
+
+                                FetchQuest fq = new FetchQuest(NPCID.Guide, dict);
                                 QuestJournal.availableQList.Add(fq);
                             }
                             else
                             {
-                                var npcList = ContentSamples.NpcsByNetId.Values.Where(npc => (npc.lifeMax >= Math.Pow(3, rating) && npc.lifeMax <= Math.Pow(3, rating + 1) && !npc.friendly));
+                                var huntQuestFactors = new NIEnemyModel.ModelInput()
+                                {
+                                    HP = Main.LocalPlayer.statLifeMax,
+                                    Mana = Main.LocalPlayer.statManaMax,
+                                    Defense = Main.LocalPlayer.statDefense,
+                                    EOC = NPC.downedBoss1,
+                                    Skel = NPC.downedBoss3,
+                                    WOF = Main.hardMode,
+                                };
 
-                                HuntQuest hq = new HuntQuest(NPCID.Guide, npcList.ElementAt(r.Next(npcList.Count())).netID, 10, rating);
+                                HuntQuest hq = new HuntQuest(NPCID.Guide, (int)NIEnemyModel.Predict(huntQuestFactors).PredictedLabel, 10);
                                 QuestJournal.availableQList.Add(hq);
                             }
 
@@ -117,7 +124,7 @@ namespace NIMod
                         }
                     }
 
-                    counter %= 60;
+                    counter %= 300;
                 }
             }
         }

@@ -81,13 +81,13 @@ namespace NIMod
                                     chat = $"Those {Lang.GetNPCNameValue(hq.enemyID)}s won't be causing noise anytime soon. Thank you, here's the reward.";
                                     Item.NewItem(npc.GetSource_GiftOrReward(), npc.Center, ItemID.CopperCoin, (int)ContentSamples.NpcsByNetId[hq.enemyID].value * hq.required * 10);
                                     break;
-                                default:
-                                    chat = $"It should be safer now at least. Take this, I've got a couple more left lying around.";
-                                    //List<int> itemList = (ContentSamples.ItemsByType.Where(item => (item.Value.rare == ItemRarityID.White && item.Value.maxStack >= 10)) as Dictionary<int, Item>).Keys.ToList();
-                                    var itemList = ContentSamples.ItemsByType.Values.Where(item => (item.rare == hq.rating && item.maxStack == 1));
+                                //default:
+                                //    chat = $"It should be safer now at least. Take this, I've got a couple more left lying around.";
+                                //    //List<int> itemList = (ContentSamples.ItemsByType.Where(item => (item.Value.rare == ItemRarityID.White && item.Value.maxStack >= 10)) as Dictionary<int, Item>).Keys.ToList();
+                                //    var itemList = ContentSamples.ItemsByType.Values.Where(item => (item.rare == hq.rating && item.maxStack == 1));
 
-                                    Item.NewItem(npc.GetSource_GiftOrReward(), npc.Center, itemList.ElementAt(r.Next(itemList.Count())).netID, 1);
-                                    break;
+                                //    Item.NewItem(npc.GetSource_GiftOrReward(), npc.Center, itemList.ElementAt(r.Next(itemList.Count())).netID, 1);
+                                //    break;
                             }
                             QuestJournal.questList.Remove(q);
                             break;
@@ -124,7 +124,7 @@ namespace NIMod
                                     chat = $"Can you get some stuff for me? I'll get a reward ready.";
                                     break;
                             }
-                            QuestJournal.questList.Add(new FetchQuest(fq.qNPCID, fq.items, fq.rating));
+                            QuestJournal.questList.Add(new FetchQuest(fq.qNPCID, fq.items));
                             QuestJournal.availableQList.Remove(q);
                             break;
                         case QuestType.hunt:
@@ -147,7 +147,7 @@ namespace NIMod
                                     chat = $"You think {Lang.GetNPCNameValue(hq.enemyID)}s have been noisy these days? Well I think so, so take care of them for me.";
                                     break;
                             }
-                            QuestJournal.questList.Add(new HuntQuest(hq.qNPCID, hq.enemyID, hq.required, hq.rating));
+                            QuestJournal.questList.Add(new HuntQuest(hq.qNPCID, hq.enemyID, hq.required));
                             QuestJournal.availableQList.Remove(q);
                             break;
                     }
